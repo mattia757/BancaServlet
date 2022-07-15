@@ -19,10 +19,16 @@
 		<param-value>com.mysql.cj.jdbc.Driver</param-value>
 	</context-param>
 
-	<!--  <filter>
+	<filter>
 		<filter-name>Checker</filter-name>
 		<filter-class>it.polimi.tiw.bancaservlet.filters.Checker</filter-class>
-	</filter> -->
+	</filter>
+	
+	<filter-mapping>
+		<filter-name>Checker</filter-name>
+		<url-pattern>/GoToHome</url-pattern>
+		<url-pattern>/Logout</url-pattern> 
+	</filter-mapping>
 	
 	<welcome-file-list>
     <welcome-file>index.html</welcome-file>
