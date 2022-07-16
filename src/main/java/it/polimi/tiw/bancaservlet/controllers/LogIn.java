@@ -17,7 +17,7 @@ import javax.servlet.http.HttpSession;
 import it.polimi.tiw.bancaservlet.beans.User;
 import it.polimi.tiw.bancaservlet.dao.UserDAO;
 
-@WebServlet("/login")
+@WebServlet("/LogIn")
 public class LogIn extends HttpServlet {
 	private static final long serialVersionUID = 1L;
 	private Connection connection = null;
@@ -67,20 +67,22 @@ public class LogIn extends HttpServlet {
     	
     	try {
 			user = userDAO.checkCredenziali(username, password);
-			
-			String path = getServletContext().getContextPath();
-			
-			if (user != null){
-				request.getSession().setAttribute("user", user);
-				response.sendRedirect(path);
-			}
-			else {
-				path = getServletContext().getContextPath() + "/index.html";
-				response.sendError(505, "Utente invalido");
-			}			
 		} catch (SQLException e) {
 			response.sendError(HttpServletResponse.SC_BAD_GATEWAY, "Accesso al DB fallito");
 		}
+    	
+    	String path = getServletContext().getContextPath();
+		
+		if (user != null){
+			request.getSession().setAttribute("user", user);
+			request.getSession().setMaxInactiveInterval(30*60);
+			path += "/Home";
+			response.sendRedirect(path);
+		}
+		else {
+			path = getServletContext().getContextPath() + "/index.html";
+			response.sendError(505, "Utente invalido");
+		}		
 	}
         
 	public void destroy() {
