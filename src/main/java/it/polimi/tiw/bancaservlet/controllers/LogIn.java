@@ -76,13 +76,17 @@ public class LogIn extends HttpServlet {
 		if (user != null){
 			request.getSession().setAttribute("user", user);
 			request.getSession().setMaxInactiveInterval(30*60);
-			path += "/Home";
-			response.sendRedirect(path);
+			/*path += "/Home";
+			System.out.println(path);
+			.sendRedirect(path);*/	
 		}
 		else {
-			path = getServletContext().getContextPath() + "/index.html";
+			path += "/index.html";
 			response.sendError(505, "Utente invalido");
-		}		
+		}
+		
+		response.sendRedirect("Home");
+		//request.getRequestDispatcher("WEB-INF/Home.html").forward(request, response);
 	}
         
 	public void destroy() {
