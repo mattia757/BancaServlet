@@ -1,5 +1,9 @@
 package it.polimi.tiw.bancaservlet.beans;
 
+import java.lang.annotation.AnnotationTypeMismatchException;
+
+import javax.swing.table.TableStringConverter;
+
 public class User {
 	private int id;
 	private String Username;
@@ -7,6 +11,17 @@ public class User {
 	private String password;
 	private String nome;
 	private String cognome;
+	
+	public User() {}
+	
+	public User(Integer id, String username, String email, String password, String nome, String cognome){
+		this.id = id;
+		this.email = email;
+		this.Username = username;
+		this.password = password;
+		this.nome = nome;
+		this.cognome = cognome;
+	}
 	
 	public int getId() {
 		return id;

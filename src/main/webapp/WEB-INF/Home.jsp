@@ -9,18 +9,23 @@
 <title>Home</title>
 </head>
 <body>
-	<table>
+	<table border = "1">
 		<thead>
 			<tr>
-				<th>Lista Conti</th>
+				<th>Id Conto</th>
+				<th>Saldo Conto</th>
 			</tr>
 		</thead>
 		<tbody>
-			<tr>
-				ciao
-				<th></th>
-			</tr>
+			<c:forEach var="conto" items = "${conti}" varStatus = "row">
+				<tr>
+					<th>${conto.id}</th>
+					<th>${conto.saldo}</th>
+				</tr>
+			</c:forEach>
 		</tbody>
 	</table>
+	
+	<p><a href="<c:url value="logout"/>">Log out</a></p>
 </body>
 </html>

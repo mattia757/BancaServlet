@@ -18,7 +18,7 @@ private Connection connection;
 	
 	public List<Conto> checkConti(Integer id) throws SQLException {
 		List<Conto> conti = new ArrayList<Conto>();
-		String query = "SELECT conto.Id FROM conto, utente WHERE utente.Id = ? && utente.Id = conto.Id_Utente";
+		String query = "SELECT c.Id, c.Id_Utente, c.Saldo FROM conto c, utente u WHERE u.Id = ? && u.Id = c.Id_Utente";
 		
 		ResultSet result = null;
 		PreparedStatement pstatement = null;		
@@ -34,8 +34,8 @@ private Connection connection;
 				
 				conti.add(c);
 			}
-		} catch (SQLException e1) {
-			throw new SQLException(e1);
+		} catch (SQLException e) {
+			throw new SQLException(e);
 
 		} finally {
 			try {

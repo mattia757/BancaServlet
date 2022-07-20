@@ -1,9 +1,11 @@
 package it.polimi.tiw.bancaservlet.controllers;
 
 import java.io.IOException;
+import java.net.PasswordAuthentication;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.SQLException;
+import java.util.Optional;
 
 import javax.servlet.ServletContext;
 import javax.servlet.ServletException;
@@ -17,10 +19,10 @@ import javax.servlet.http.HttpSession;
 import it.polimi.tiw.bancaservlet.beans.User;
 import it.polimi.tiw.bancaservlet.dao.UserDAO;
 
-@WebServlet("/LogIn")
 public class LogIn extends HttpServlet {
 	private static final long serialVersionUID = 1L;
 	private Connection connection = null;
+	UserDAO userDAO = new UserDAO(connection);
        
 	public LogIn() {
 		super();
@@ -49,44 +51,45 @@ public class LogIn extends HttpServlet {
 	
 	protected void doGet(HttpServletRequest request, HttpServletResponse response)
 			throws ServletException, IOException {
-		// TODO Auto-generated method stub
-		response.getWriter().append("Served at: ").append(request.getContextPath());
+		request.getRequestDispatcher("index.html").forward(request, response);
 	}
     
     public void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+    	// Richiesta parametri per Login
     	String username = request.getParameter("username");
     	String password = request.getParameter("password");
     	
-    	if (username == null || username.isEmpty()|| password == null || password.isEmpty()) {
-			response.sendError(HttpServletResponse.SC_BAD_REQUEST, "Parametri incompleti");
+    	// Controlli parametri
+    	if (username == null || username.isEmpty()) {
+    		request.getSession().setAttribute("ServletMessage", "Inserisci lo username");
+			response.sendRedirect("login");
 			return;
 		}
-    	
-    	UserDAO userDAO = new UserDAO(connection);
-    	User user = null;
-    	
-    	try {
-			user = userDAO.checkCredenziali(username, password);
-		} catch (SQLException e) {
-			response.sendError(HttpServletResponse.SC_BAD_GATEWAY, "Accesso al DB fallito");
-		}
-    	
-    	String path = getServletContext().getContextPath();
-		
-		if (user != null){
-			request.getSession().setAttribute("user", user);
-			request.getSession().setMaxInactiveInterval(30*60);
-			/*path += "/Home";
-			System.out.println(path);
-			.sendRedirect(path);*/	
-		}
-		else {
-			path += "/index.html";
-			response.sendError(505, "Utente invalido");
+		if (password == null || password.isEmpty()) {
+			request.getSession().setAttribute("ServletMessage", "Insert la password");
+			response.sendRedirect("login");
+			return;
 		}
 		
+		// Check if the user exists
+		Optional<User> maybeUser = userDAO.getByUsername(username);
+		if (maybeUser.isEmpty()) {
+			request.getSession().setAttribute("ServletMessage", "Utente non esiste");
+			response.sendRedirect("login");
+			return;
+		}
+		
+		// Check if the password matches
+		User user = maybeUser.get();
+		if (!user.getPassword().equals(password)) {
+			request.getSession().setAttribute("ServletMessage", "Password errata");
+			response.sendRedirect("login");
+			return;
+		}
+		
+		// Set session User attribute
+		request.getSession().setAttribute("User", user);
 		response.sendRedirect("Home");
-		//request.getRequestDispatcher("WEB-INF/Home.html").forward(request, response);
 	}
         
 	public void destroy() {
