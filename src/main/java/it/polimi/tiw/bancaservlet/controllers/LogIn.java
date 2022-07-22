@@ -22,7 +22,6 @@ import it.polimi.tiw.bancaservlet.dao.UserDAO;
 public class LogIn extends HttpServlet {
 	private static final long serialVersionUID = 1L;
 	private Connection connection = null;
-	UserDAO userDAO = new UserDAO(connection);
        
 	public LogIn() {
 		super();
@@ -55,6 +54,7 @@ public class LogIn extends HttpServlet {
 	}
     
     public void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+    	UserDAO userDAO = new UserDAO(connection);
     	// Richiesta parametri per Login
     	String username = request.getParameter("username");
     	String password = request.getParameter("password");
@@ -88,8 +88,8 @@ public class LogIn extends HttpServlet {
 		}
 		
 		// Set session User attribute
-		request.getSession().setAttribute("User", user);
-		response.sendRedirect("Home");
+		request.getSession().setAttribute("user", user);
+		response.sendRedirect("home");
 	}
         
 	public void destroy() {

@@ -21,7 +21,6 @@ import it.polimi.tiw.bancaservlet.beans.User;
 import it.polimi.tiw.bancaservlet.dao.ContoDAO;
 import it.polimi.tiw.bancaservlet.beans.Conto;
 
-@WebServlet("/Home")
 public class Home extends HttpServlet {
 	private static final long serialVersionUID = 1L;
 	private Connection connection = null;

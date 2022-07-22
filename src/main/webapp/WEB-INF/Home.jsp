@@ -7,6 +7,10 @@
 <head>
 <meta charset="ISO-8859-1">
 <title>Home</title>
+
+<script>
+</script>
+
 </head>
 <body>
 	<table border = "1">
@@ -19,8 +23,9 @@
 		<tbody>
 			<c:forEach var="conto" items = "${conti}" varStatus = "row">
 				<tr>
-					<th>${conto.id}</th>
-					<th>${conto.saldo}</th>
+					<td>${conto.id}</td>
+					<td>${conto.saldo}</td>
+					<td><a href = "<%= getServletContext().getContextPath() %>/dettagliconto?idConto=${conto.id}"><button>Dettagli</button></a></td>
 				</tr>
 			</c:forEach>
 		</tbody>

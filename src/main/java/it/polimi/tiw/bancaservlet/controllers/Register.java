@@ -1,6 +1,7 @@
 package it.polimi.tiw.bancaservlet.controllers;
 
 import java.io.IOException;
+import java.io.PrintWriter;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.SQLException;
@@ -14,10 +15,10 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+
 import it.polimi.tiw.bancaservlet.beans.User;
 import it.polimi.tiw.bancaservlet.dao.UserDAO;
 
-@WebServlet("/register")
 public class Register extends HttpServlet {
 	private static final long serialVersionUID = 1L;
 	private Connection connection = null;
@@ -28,24 +29,28 @@ public class Register extends HttpServlet {
         // TODO Auto-generated constructor stub
     }
 
-	public void init(ServletConfig config) throws ServletException {
-		try{
-    		ServletContext context = getServletContext();
-    		String driver = context.getInitParameter("dbDriver");
-    		String url = context.getInitParameter("dbUrl");
-    		String user = context.getInitParameter("dbUser");
-    		String password = context.getInitParameter("dbPassword");
-    		Class.forName(driver);
-    		connection = DriverManager.getConnection(url, user, password);
-			
-		} catch (ClassNotFoundException e) {
+	@Override
+    public void init(ServletConfig config) throws ServletException {		
+		final String DB_URL = "jdbc:mysql://localhost:3306/banca?serverTimezone=UTC";
+		final String USER = "root";
+		final String PASS = "root";
+		Connection connection = null;
+		
+		System.out.println("Connectiong database...");
+		
+		try {
+			Class.forName("com.mysql.cj.jdbc.Driver");
+		} catch(ClassNotFoundException e) {
 			e.printStackTrace();
-			throw new UnavailableException("Non è possibile caricare il driver del  DB");
 		}
-    	catch (SQLException e) {
-    		e.printStackTrace();
-    		throw new UnavailableException("Impossibile stabilire una connessione col DB");
-    	}
+		try {
+			connection = DriverManager.getConnection(DB_URL , USER , PASS);
+			System.out.println("Database connected");
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+		
+		userDAO = new UserDAO(connection);
 	}
 
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
@@ -54,6 +59,8 @@ public class Register extends HttpServlet {
 	}
 
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+		PrintWriter out = response.getWriter();
+		
 		// Richiesta parametri per Registrazione
 		String username = request.getParameter("username");
     	String password = request.getParameter("password");
@@ -74,7 +81,9 @@ public class Register extends HttpServlet {
     	
     	// Controllo password e re_password
 		if (!password.equals(re_password)) {
-			request.getSession().setAttribute("ServletMessage", "Inserisci la stessa password");
+			//TODO Controllo messaggi errore password
+			//response.sendError(HttpServletResponse.SC_UNAUTHORIZED, "Inserisci la stessa password");
+			//request.getSession().setAttribute("ServletMessage", "Inserisci la stessa password");
 			response.sendRedirect("register");
 			return;
 		}
@@ -109,7 +118,7 @@ public class Register extends HttpServlet {
 		user.setCognome(cognome);
 		
 		// Try to insert
-		if (!userDAO.insert(user)) {
+		if (userDAO.insert(user) == 0) {
 			request.getSession().setAttribute("ServletMessage", "Failed to create the user. Try later");
 			response.sendRedirect("register");
 			return;
