@@ -41,6 +41,11 @@
   		<servlet-class>it.polimi.tiw.bancaservlet.controllers.DettagliConto</servlet-class>
   	</servlet>
   	
+  	<servlet>
+  		<servlet-name>aggiungiconto</servlet-name>
+  		<servlet-class>it.polimi.tiw.bancaservlet.controllers.AggiungiConto</servlet-class>
+  	</servlet>
+  	
   	<!-- Servlets mapping -->
 	<servlet-mapping>
   		<servlet-name>login</servlet-name>
@@ -60,6 +65,11 @@
   	<servlet-mapping>
   		<servlet-name>dettagliconto</servlet-name>
   		<url-pattern>/dettagliconto</url-pattern>
+  	</servlet-mapping>
+  	
+  	<servlet-mapping>
+  		<servlet-name>aggiungiconto</servlet-name>
+  		<url-pattern>/aggiungiconto</url-pattern>
   	</servlet-mapping>
 	
 	<!-- Filters -->

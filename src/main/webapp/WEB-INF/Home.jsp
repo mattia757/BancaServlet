@@ -23,14 +23,19 @@
 		<tbody>
 			<c:forEach var="conto" items = "${conti}" varStatus = "row">
 				<tr>
-					<td>${conto.id}</td>
-					<td>${conto.saldo}</td>
-					<td><a href = "<%= getServletContext().getContextPath() %>/dettagliconto?idConto=${conto.id}"><button>Dettagli</button></a></td>
+					<td id = "id" name = "id">${conto.id}</td>
+					<td id = "saldo" name = "saldo">${conto.saldo}</td>
+					<td><input type="submit" value = "Dettagli"/></td> <!-- TODO Da fare il Get con id conto -->
 				</tr>
 			</c:forEach>
 		</tbody>
 	</table>
 	
+	 <p><a href="<c:url value="aggiungiconto"/>">Aggiungi Conto</a></p> 
+	<!-- <form method ="POST" action = "aggiungiconto">
+		<input type = "text" id = "saldoconto" name = "saldoconto" />
+		<input type = "submit" />-->
+	</form>
 	<p><a href="<c:url value="logout"/>">Log out</a></p>
 </body>
 </html>

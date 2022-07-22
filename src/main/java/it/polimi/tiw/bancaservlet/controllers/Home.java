@@ -6,6 +6,7 @@ import java.sql.DriverManager;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.Enumeration;
 import java.util.List;
 
 import javax.servlet.RequestDispatcher;
@@ -82,7 +83,7 @@ public class Home extends HttpServlet {
 			} catch (SQLException e) {}
 			
 			try {
-				conti = cDAO.checkConti(u.getId());
+				conti = cDAO.getByID(u.getId());
 				String path = "/WEB-INF/Home.jsp";
 				request.setAttribute("conti", conti);
 				RequestDispatcher dispatcher = request.getRequestDispatcher(path);
@@ -93,12 +94,13 @@ public class Home extends HttpServlet {
 			}
 				
 		}
-	}
+	}	
 
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		// TODO Auto-generated method stub
 		doGet(request, response);
 	}
+
 	
 	public void destroy() {
 		try {

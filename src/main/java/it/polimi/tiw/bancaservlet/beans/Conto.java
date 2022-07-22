@@ -5,6 +5,14 @@ public class Conto {
 	float saldo;
 	int id_utente;
 	
+	public Conto() {}
+	
+	public Conto(Integer id, Float saldo, Integer id_utente){
+		this.id = id;
+		this.saldo = saldo;
+		this.id_utente = id_utente;
+	}
+	
 	public int getId() {
 		return id;
 	}

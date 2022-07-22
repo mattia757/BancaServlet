@@ -11,17 +11,20 @@ import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import javax.sound.midi.SysexMessage;
 
 import it.polimi.tiw.bancaservlet.dao.UserDAO;
+import it.polimi.tiw.bancaservlet.dao.ContoDAO;
+import it.polimi.tiw.bancaservlet.beans.Conto;
 
 
-public class DettagliConto extends HttpServlet {
+public class AggiungiConto extends HttpServlet {
 	private static final long serialVersionUID = 1L;
-	private Connection connection;
-       
-    public DettagliConto() {
+	private ContoDAO contoDAO;
+	private UserDAO userDAO;
+	
+    public AggiungiConto() {
         super();
+        // TODO Auto-generated constructor stub
     }
 
     @Override
@@ -45,19 +48,32 @@ public class DettagliConto extends HttpServlet {
 			e.printStackTrace();
 		}
 		
-		//userDAO = new UserDAO(connection);
+		userDAO = new UserDAO(connection);
+		contoDAO = new ContoDAO(connection);
 	}
     
-    protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		// TODO Auto-generated method stub
-		
-		String id = request.getParameter("idConto");
-		System.out.println(id);
 	}
 
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		// TODO Auto-generated method stub
-		doGet(request, response);
+		String currentUser = (String) request.getSession().getAttribute("user");
+		
+		userDAO.getByUsername(currentUser);	
+		
+		Integer id_current_userInteger = userDAO
+		
+		Float saldo = (Float) request.getParameter(saldo);
+				
+		
+		
+		System.out.println(saldo);
+		
+		Conto conto = new Conto();
+		conto.setSaldo(saldo);
+		conto.setId_utente(id_utente);
+
 	}
 
 }

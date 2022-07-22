@@ -6,8 +6,10 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 import it.polimi.tiw.bancaservlet.beans.Conto;
+import it.polimi.tiw.bancaservlet.beans.User;
 
 public class ContoDAO {
 private Connection connection;
@@ -16,7 +18,9 @@ private Connection connection;
 		this.connection = connection;
 	}
 	
-	public List<Conto> checkConti(Integer id) throws SQLException {
+	//Insert, getId_utente
+	
+	public List<Conto> getByID(Integer id) throws SQLException {
 		List<Conto> conti = new ArrayList<Conto>();
 		String query = "SELECT c.Id, c.Id_Utente, c.Saldo FROM conto c, utente u WHERE u.Id = ? && u.Id = c.Id_Utente";
 		
@@ -56,5 +60,66 @@ private Connection connection;
 		}
 		
 		return conti;	
+	}
+	
+	public Optional<User> getById(Integer id) {
+		String SQL_GET_BY_ID = "Select Id, Username, Email, Password, Nome, Cognome from utente Where Id = ?";
+		try (PreparedStatement ps = connection.prepareStatement(SQL_GET_BY_ID)) {
+			ps.setInt(1, id);
+			try (ResultSet resultSet = ps.executeQuery()) {
+				if (resultSet.next()) {
+					String email = resultSet.getString(1);
+					String username = resultSet.getString(2);
+					String password = resultSet.getString(3);
+					String nome = resultSet.getString(4);
+					String cognome = resultSet.getString(5);
+					return Optional.of(new User(id, username, email, password, nome, cognome));
+				} else {
+					return Optional.empty();
+				}
+			}
+		} catch (SQLException e) {
+			e.printStackTrace();
+			return Optional.empty();
+		}
+	}
+		
+	public Optional<User> getByEmail(String email) {
+		String SQL_GET_BY_EMAIL ="select Id, Username, Email, Password, Nome, Cognome From utente where Email = ?";
+		try (PreparedStatement ps = connection.prepareStatement(SQL_GET_BY_EMAIL)) {
+			ps.setString(1, email);
+			try (ResultSet resultSet = ps.executeQuery()) {
+				if (resultSet.next()) {
+					Integer id = resultSet.getInt(1);
+					String username = resultSet.getString(2);
+					String password = resultSet.getString(3);
+					String nome = resultSet.getString(4);
+					String cognome = resultSet.getString(5);
+					return Optional.of(new User(id, username, email, password, nome, cognome));
+				} else {
+					return Optional.empty();
+				}
+			}
+		} catch (SQLException e) {
+			e.printStackTrace();
+			return Optional.empty();
+		}
+	}
+	
+	public int insert(Conto conto) {
+		String SQL_INSERT = "Insert Into conto (Saldo, Id_Utente) values (?, ?)";
+		int result = 0;
+		PreparedStatement ps;
+		
+		try {
+			ps = connection.prepareStatement(SQL_INSERT);
+			ps.setFloat(1, conto.getSaldo());
+			ps.setInt(2, conto.getId_utente());
+			
+			result = ps.executeUpdate();
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+		return result;
 	}
 }
