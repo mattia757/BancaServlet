@@ -36,7 +36,7 @@ public class Register extends HttpServlet {
 		final String PASS = "root";
 		Connection connection = null;
 		
-		System.out.println("Connectiong database...");
+		System.out.println("Connecting database...");
 		
 		try {
 			Class.forName("com.mysql.cj.jdbc.Driver");

@@ -18,8 +18,7 @@ private Connection connection;
 		this.connection = connection;
 	}
 	
-	//Insert, getId_utente
-	
+	//Da eliminare uno di questi 2 metodi
 	public List<Conto> getByID(Integer id) throws SQLException {
 		List<Conto> conti = new ArrayList<Conto>();
 		String query = "SELECT c.Id, c.Id_Utente, c.Saldo FROM conto c, utente u WHERE u.Id = ? && u.Id = c.Id_Utente";
@@ -85,6 +84,7 @@ private Connection connection;
 	}
 		
 	public Optional<User> getByEmail(String email) {
+
 		String SQL_GET_BY_EMAIL ="select Id, Username, Email, Password, Nome, Cognome From utente where Email = ?";
 		try (PreparedStatement ps = connection.prepareStatement(SQL_GET_BY_EMAIL)) {
 			ps.setString(1, email);
@@ -106,6 +106,25 @@ private Connection connection;
 		}
 	}
 	
+	public Boolean isVerified(int id_utente, int id_conto) {
+		String query = "select null From conto c Where c.Id = ? && c.Id_Utente = ?";
+		boolean isVerified = false;
+		try (PreparedStatement ps = connection.prepareStatement(query)) {
+			ps.setInt(1, id_conto);
+			ps.setInt(2, id_utente);
+			try (ResultSet resultSet = ps.executeQuery()) {
+				if (resultSet.next()) {
+					isVerified = true;
+				}
+			}
+		} catch (SQLException e) {
+			e.printStackTrace();
+			isVerified = false;
+		}
+		return isVerified;
+		
+	}
+
 	public int insert(Conto conto) {
 		String SQL_INSERT = "Insert Into conto (Saldo, Id_Utente) values (?, ?)";
 		int result = 0;

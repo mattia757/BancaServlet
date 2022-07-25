@@ -25,7 +25,7 @@
 				<tr>
 					<td id = "id" name = "id">${conto.id}</td>
 					<td id = "saldo" name = "saldo">${conto.saldo}</td>
-					<td><input type="submit" value = "Dettagli"/></td> <!-- TODO Da fare il Get con id conto -->
+					<td><a href = "dettagliconto?idConto=${conto.id}">Dettagli</a></td>
 				</tr>
 			</c:forEach>
 		</tbody>

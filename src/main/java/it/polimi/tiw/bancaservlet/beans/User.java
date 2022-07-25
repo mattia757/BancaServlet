@@ -1,6 +1,7 @@
 package it.polimi.tiw.bancaservlet.beans;
 
 import java.lang.annotation.AnnotationTypeMismatchException;
+import java.util.Objects;
 
 import javax.swing.table.TableStringConverter;
 
@@ -59,4 +60,31 @@ public class User {
 	public void setCognome(String cognome) {
 		this.cognome = cognome;
 	}
+
+	@Override
+	public String toString() {
+		return "User [id=" + id + ", Username=" + Username + ", email=" + email + ", password=" + password + ", nome="
+				+ nome + ", cognome=" + cognome + "]";
+	}
+
+	@Override
+	public int hashCode() {
+		return Objects.hash(Username, cognome, email, id, nome, password);
+	}
+
+	@Override
+	public boolean equals(Object obj) {
+		if (this == obj)
+			return true;
+		if (obj == null)
+			return false;
+		if (getClass() != obj.getClass())
+			return false;
+		User other = (User) obj;
+		return Objects.equals(Username, other.Username) && Objects.equals(cognome, other.cognome)
+				&& Objects.equals(email, other.email) && id == other.id && Objects.equals(nome, other.nome)
+				&& Objects.equals(password, other.password);
+	}
+	
+	
 }

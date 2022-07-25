@@ -2,11 +2,9 @@ package it.polimi.tiw.bancaservlet.controllers;
 
 import java.io.IOException;
 import java.sql.Connection;
+import java.sql.Date;
 import java.sql.DriverManager;
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.util.Optional;
 
 import javax.servlet.ServletConfig;
 import javax.servlet.ServletException;
@@ -15,24 +13,20 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-import it.polimi.tiw.bancaservlet.dao.UserDAO;
-import it.polimi.tiw.bancaservlet.dao.ContoDAO;
-import it.polimi.tiw.bancaservlet.beans.Conto;
-import it.polimi.tiw.bancaservlet.beans.User;
+import it.polimi.tiw.bancaservlet.beans.Transazione;
+import it.polimi.tiw.bancaservlet.dao.TransazioneDAO;
 
-
-public class AggiungiConto extends HttpServlet {
+public class doTransaction extends HttpServlet {
 	private static final long serialVersionUID = 1L;
-	private Connection connection = null;
-	private ContoDAO contoDAO;
-	private UserDAO userDAO;
-	
-    public AggiungiConto() {
+	TransazioneDAO tDAO;
+       
+    public doTransaction() {
         super();
         // TODO Auto-generated constructor stub
     }
 
-    @Override
+
+	@Override
     public void init(ServletConfig config) throws ServletException {		
 		final String DB_URL = "jdbc:mysql://localhost:3306/banca?serverTimezone=UTC";
 		final String USER = "root";
@@ -53,26 +47,25 @@ public class AggiungiConto extends HttpServlet {
 			e.printStackTrace();
 		}
 		
-		userDAO = new UserDAO(connection);
-		contoDAO = new ContoDAO(connection);
+		TransazioneDAO tDAO= new TransazioneDAO(connection);
 	}
-    
+
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		// TODO Auto-generated method stub
-		request.getRequestDispatcher("WEB-INF/AggiungiConto.jsp").forward(request, response);
+		
 	}
 
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-		// TODO Auto-generated method stub
-		User user = (User) request.getSession().getAttribute("user");
 		
-		Float saldo = Float.parseFloat(request.getParameter("saldo"));
+		/*tDAO.insert(new Transazione(
+				0,
+				Float.parseFloat(request.getParameter("importo")),
+				Date.valueOf(request.getParameter("data")),
+				,
+				Integer.parseInt(request.getParameter("id_dest")),
+				request.getParameter("causale")
+		));*/
 		
-		contoDAO.insert(new Conto(
-			0,
-			saldo,
-			user.getId()
-		));
+		System.out.println(request.getAttributeNames());
 	}
-
 }

@@ -1,5 +1,7 @@
 package it.polimi.tiw.bancaservlet.beans;
 
+import java.util.Objects;
+
 public class Conto {
 	int id;
 	float saldo;
@@ -36,4 +38,29 @@ public class Conto {
 	public void setId_utente(int id_utente) {
 		this.id_utente = id_utente;
 	}
+
+	@Override
+	public String toString() {
+		return "Conto [id=" + id + ", saldo=" + saldo + ", id_utente=" + id_utente + "]";
+	}
+
+	@Override
+	public int hashCode() {
+		return Objects.hash(id, id_utente, saldo);
+	}
+
+	@Override
+	public boolean equals(Object obj) {
+		if (this == obj)
+			return true;
+		if (obj == null)
+			return false;
+		if (getClass() != obj.getClass())
+			return false;
+		Conto other = (Conto) obj;
+		return id == other.id && id_utente == other.id_utente
+				&& Float.floatToIntBits(saldo) == Float.floatToIntBits(other.saldo);
+	}
+	
+	
 }
