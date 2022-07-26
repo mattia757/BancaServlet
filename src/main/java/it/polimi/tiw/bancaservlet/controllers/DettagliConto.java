@@ -4,6 +4,7 @@ import java.io.IOException;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.SQLException;
+import java.util.Iterator;
 import java.util.List;
 
 import javax.servlet.ServletConfig;
@@ -12,6 +13,7 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import it.polimi.tiw.bancaservlet.beans.Conto;
 import it.polimi.tiw.bancaservlet.beans.Transazione;
 import it.polimi.tiw.bancaservlet.beans.User;
 import it.polimi.tiw.bancaservlet.dao.ContoDAO;
@@ -57,17 +59,37 @@ public class DettagliConto extends HttpServlet {
 		// TODO Auto-generated method stub
     	Integer conto_id = Integer.parseInt(request.getParameter("idConto"));
     	User user = (User) request.getSession().getAttribute("user");
-    	    	    	
-    	if (contoDAO.isVerified(user.getId(), conto_id)) {
-    		List<Transazione> transazioni = transazioneDAO.getTransazioniById(conto_id);
-        	request.setAttribute("transazioni", transazioni);
-        	request.setAttribute("idConto", conto_id);
-        	request.getRequestDispatcher("/WEB-INF/StatoConto.jsp").forward(request, response);
-		}
-    	else {
-    		response.sendError(406, "Non hai il permesso!");
-    	}
+    	List<Conto> conti;
     	
+    	try {
+			conti = contoDAO.getByID(conto_id);
+			boolean Trovato = false;
+			
+			for (Conto conto : conti) {
+				if (conto.getId() == conto_id) {
+					Trovato = true;
+				}
+			}
+			
+			if (Trovato = true) {
+				if (contoDAO.isVerified(user.getId(), conto_id)) {
+		    		List<Transazione> transazioni = transazioneDAO.getTransazioniById(conto_id);
+		        	request.setAttribute("transazioni", transazioni);
+		        	request.setAttribute("idConto", conto_id);
+		        	request.getRequestDispatcher("/WEB-INF/StatoConto.jsp").forward(request, response);
+				}
+		    	else {
+		    		response.sendError(406, "Non hai il permesso!");
+		    	}
+			}
+			else {
+				response.sendError(406, "Non hai il permesso!");
+			}
+			
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 	}
 
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {

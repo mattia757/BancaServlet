@@ -5,6 +5,7 @@ import java.io.PrintWriter;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.SQLException;
+import java.util.regex.Pattern;
 
 import javax.servlet.ServletConfig;
 import javax.servlet.ServletException;
@@ -88,6 +89,15 @@ public class Register extends HttpServlet {
 		// Check if user already exists
 		if (userDAO.getByUsername(username).isPresent()) {
 			response.sendError(400, "Lo username inserito è già registrato");
+			return;
+		}
+		
+		//Check Email
+		String regexPattern = "^(.+)@(\\S+)$";    
+	    if (!Pattern.compile(regexPattern)
+	    	      .matcher(email)
+	    	      .matches()) {
+			response.sendError(400, "Email non valida!");
 			return;
 		}
 		

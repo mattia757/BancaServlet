@@ -59,24 +59,30 @@ public class doTransaction extends HttpServlet {
 
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 				
-		Integer id_conto = Integer.parseInt(request.getParameter("idconto"));
+		Integer id_conto = Integer.parseInt(request.getParameter("idconto")); // Mittente
+		
+		Integer id_conto_dest = Integer.parseInt(request.getParameter("id_dest")); //Detinatario
 		
 		Conto c = tDAO.FillContoById(id_conto);
-		
-		System.out.println(c);
 	    
-		try {
-			tDAO.insert(new Transazione(
-				0,
-				Float.parseFloat(request.getParameter("importo")),
-				Date.valueOf(LocalDate.now()),
-				id_conto,
-				Integer.parseInt(request.getParameter("id_dest")),
-				request.getParameter("causale")
-			), c);
-		} catch (SQLException e) {
-			response.sendError(406, "Errore nell inserimento della transazione al DB, operazioni nulle!");
+		if (Float.parseFloat(request.getParameter("importo")) <= c.getSaldo()) {
+			try {
+				tDAO.insert(new Transazione(
+					0,
+					Float.parseFloat(request.getParameter("importo")),
+					Date.valueOf(LocalDate.now()),
+					id_conto,
+					id_conto_dest,
+					request.getParameter("causale")
+				), c, id_conto_dest);
+				
+				response.sendRedirect("home");
+			} catch (SQLException e) {
+				response.sendError(406, "Errore nell inserimento della transazione al DB, operazioni nulle!");
+			}
 		}
-
+		else {
+			response.sendError(406, "Il saldo non è sufficiente!");
+		}
 	}
 }

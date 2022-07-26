@@ -59,6 +59,47 @@ private Connection connection;
 		
 		return conti;	
 	}
+	
+	public Conto getById(Integer id) throws SQLException {
+		String query = "SELECT * FROM conto c WHERE c.Id = ?";
+		Conto c = new Conto();
+		
+		ResultSet result = null;
+		PreparedStatement pstatement = null;		
+		try {
+			pstatement = connection.prepareStatement(query);
+			pstatement.setInt(1, id);
+			result = pstatement.executeQuery();
+			while (result.next()) {
+				
+				c.setId(result.getInt("Id"));
+				c.setId_utente(result.getInt("Id_Utente"));
+				c.setSaldo(result.getFloat("Saldo"));
+			}
+		} catch (SQLException e) {
+			throw new SQLException(e);
+
+		} finally {
+			try {
+				if (result != null) {
+					result.close();
+				}
+			} catch (Exception e2) {
+				throw new SQLException("Impossibile chudere il resultset");
+			}
+			
+			try {
+				if (pstatement != null) {
+					pstatement.close();
+				}
+			} catch (Exception e2) {
+				throw new SQLException("Impossibile chudere lo statement");
+			}
+		}
+		
+		return c;	
+	}
+	
 		
 	public Optional<User> getByEmail(String email) {
 
