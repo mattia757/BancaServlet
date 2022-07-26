@@ -60,12 +60,10 @@ public class LogIn extends HttpServlet {
     	// Controlli parametri
     	if (username == null || username.isEmpty()) {
     		response.sendError(400, "Inserisci lo username");
-			response.sendRedirect("login");
 			return;
 		}
 		if (password == null || password.isEmpty()) {
 			response.sendError(400, "Inserisci la password");
-			response.sendRedirect("login");
 			return;
 		}
 		
@@ -73,7 +71,6 @@ public class LogIn extends HttpServlet {
 		Optional<User> maybeUser = userDAO.getByUsername(username);
 		if (maybeUser.isEmpty()) {
 			response.sendError(400, "L'utente inserito non esiste");
-			response.sendRedirect("login");
 			return;
 		}
 		
@@ -81,7 +78,6 @@ public class LogIn extends HttpServlet {
 		User user = maybeUser.get();
 		if (!user.getPassword().equals(password)) {
 			response.sendError(400, "Inserisci la stessa password");
-			response.sendRedirect("login");
 			return;
 		}
 		

@@ -38,8 +38,8 @@
 	
 	<form method = "POST" action = "dotransaction">
 		Importo: <input type = "number" step = "any" id = "importo" name = "importo" value = "importo" required/> <br><br>
-		Data: <input type = "datetime-local" id = "data" name = "data" value = "Data" required/> <br><br> 
-		Importo: <input type="number" min="1" id="id_dest" name="id_dest" value="Id_dest" required /> <br><br>
+		<!--Data: <input type = "datetime-local" id = "data" name = "data" value = "Data" required/> <br><br>  -->
+		Id Destinatario: <input type="number" min="1" id="id_dest" name="id_dest" value="Id_dest" required /> <br><br>
 		Causale: <input type = "text" id = "causale" name = "causale" value = "Causale" required/> <br><br>
 		<input type = "hidden" value= "<%=id_conto%>" name = "idconto"> 
 		<input type = "submit" />

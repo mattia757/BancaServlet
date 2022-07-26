@@ -5,11 +5,11 @@ import java.sql.Connection;
 import java.sql.Date;
 import java.sql.DriverManager;
 import java.sql.SQLException;
-import java.util.Enumeration;
+import java.time.LocalDate;
+import java.time.LocalDateTime;
 
 import javax.servlet.ServletConfig;
 import javax.servlet.ServletException;
-import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -64,17 +64,17 @@ public class doTransaction extends HttpServlet {
 		Conto c = tDAO.FillContoById(id_conto);
 		
 		System.out.println(c);
-		
-		if (true) {
+	    
+		try {
 			tDAO.insert(new Transazione(
 				0,
 				Float.parseFloat(request.getParameter("importo")),
-				Date.valueOf(request.getParameter("data")),
+				Date.valueOf(LocalDate.now()),
 				id_conto,
 				Integer.parseInt(request.getParameter("id_dest")),
 				request.getParameter("causale")
 			), c);
-		} else {
+		} catch (SQLException e) {
 			response.sendError(406, "Errore nell inserimento della transazione al DB, operazioni nulle!");
 		}
 

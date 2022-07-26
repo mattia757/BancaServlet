@@ -102,7 +102,7 @@ private Connection connection;
 		
 	}
 
-	public int insert(Conto conto) {
+	public int insert(Conto conto) throws SQLException {
 		String SQL_INSERT = "Insert Into conto (Saldo, Id_Utente) values (?, ?)";
 		int result = 0;
 		PreparedStatement ps;

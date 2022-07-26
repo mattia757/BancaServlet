@@ -59,7 +59,6 @@ public class AggiungiConto extends HttpServlet {
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		// TODO Auto-generated method stub
 		User user = (User) request.getSession().getAttribute("user");
-		
 		Float saldo = Float.parseFloat(request.getParameter("saldo"));
 
 		try
@@ -69,8 +68,9 @@ public class AggiungiConto extends HttpServlet {
 				saldo,
 				user.getId()
 			));
+			response.sendRedirect("home");
 		}
-		catch
+		catch (Exception e)
 		{
 			response.sendError(406, "Errore nell'inserimento del conto, controlla i campi!");
 		}	

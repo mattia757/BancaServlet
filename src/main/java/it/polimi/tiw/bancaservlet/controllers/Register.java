@@ -54,9 +54,7 @@ public class Register extends HttpServlet {
 		request.getRequestDispatcher("WEB-INF/register.html").forward(request, response);
 	}
 
-	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-		PrintWriter out = response.getWriter();
-		
+	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {		
 		// Richiesta parametri per Registrazione
 		String username = request.getParameter("username");
     	String password = request.getParameter("password");
@@ -78,21 +76,18 @@ public class Register extends HttpServlet {
     	// Controllo password e re_password
 		if (!password.equals(re_password)) {
 			response.sendError(400, "Inserisci la stessa password");
-			response.sendRedirect("register");
 			return;
 		}
 		
 		// Password > 8
 		if (password.length() < 8) {
 			response.sendError(400, "La password deve essere lunga almeno 8 caratteri");
-			response.sendRedirect("register");
 			return;
 		}
 		
 		// Check if user already exists
 		if (userDAO.getByUsername(username).isPresent()) {
 			response.sendError(400, "Lo username inserito è già registrato");
-			response.sendRedirect("register");
 			return;
 		}
 		
@@ -107,13 +102,9 @@ public class Register extends HttpServlet {
 		// Try to insert
 		if (userDAO.insert(user) == 0) {
 			response.sendError(400, "Impossibile creare l'utente. Prova più tardi");
-			response.sendRedirect("register");
 			return;
 		}
-		// Success: go to login page TODO Cercare come dare un messaggio di successo
-		
-		//request.getSession().setAttribute("ServletMessage", "User registered");
-		//response.sendError(400, "Inserisci lo username");
+
 		response.sendRedirect("login");
 	}
 	

@@ -1,7 +1,6 @@
 package it.polimi.tiw.bancaservlet.beans;
 
 import java.sql.Date;
-import java.util.Objects;
 
 public class Transazione {
 	int id;
