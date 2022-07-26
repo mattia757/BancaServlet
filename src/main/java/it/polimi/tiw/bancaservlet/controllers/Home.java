@@ -6,21 +6,19 @@ import java.sql.DriverManager;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.util.Enumeration;
 import java.util.List;
 
 import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletContext;
 import javax.servlet.ServletException;
 import javax.servlet.UnavailableException;
-import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import it.polimi.tiw.bancaservlet.beans.Conto;
 import it.polimi.tiw.bancaservlet.beans.User;
 import it.polimi.tiw.bancaservlet.dao.ContoDAO;
-import it.polimi.tiw.bancaservlet.beans.Conto;
 
 public class Home extends HttpServlet {
 	private static final long serialVersionUID = 1L;
@@ -61,8 +59,7 @@ public class Home extends HttpServlet {
 		User u = (User) request.getSession().getAttribute("user");
 		
 		if (u == null) {
-			request.getSession().setAttribute("ServletMessages",
-					"Utente non in sessione");
+			response.sendError(400, "Utente non in sessione");
 			response.sendRedirect("index.html");
 			return;
 		}
@@ -90,7 +87,7 @@ public class Home extends HttpServlet {
 				dispatcher.forward(request, response);
 			} catch (SQLException e) {
 				e.printStackTrace();
-				response.sendError(HttpServletResponse.SC_INTERNAL_SERVER_ERROR, "Accesso al DB fallito");
+				response.sendError(500, "Accesso al DB fallito");
 			}
 				
 		}

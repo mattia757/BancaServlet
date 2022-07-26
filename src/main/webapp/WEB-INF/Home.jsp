@@ -8,12 +8,9 @@
 <meta charset="ISO-8859-1">
 <title>Home</title>
 
-<script>
-</script>
-
 </head>
-<body>
-	<table border = "1">
+<body style="text-align: center;">
+	<table border = "1" style = "margin-left: 45%;">
 		<thead>
 			<tr>
 				<th>Id Conto</th>
@@ -31,10 +28,7 @@
 		</tbody>
 	</table>
 	
-	 <p><a href="<c:url value="aggiungiconto"/>">Aggiungi Conto</a></p> 
-	<!-- <form method ="POST" action = "aggiungiconto">
-		<input type = "text" id = "saldoconto" name = "saldoconto" />
-		<input type = "submit" />-->
+	 <p><a href="<c:url value="aggiungiconto" />">Aggiungi Conto</a></p> 
 	</form>
 	<p><a href="<c:url value="logout"/>">Log out</a></p>
 </body>

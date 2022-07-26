@@ -5,6 +5,7 @@ import java.sql.Connection;
 import java.sql.Date;
 import java.sql.DriverManager;
 import java.sql.SQLException;
+import java.util.Enumeration;
 
 import javax.servlet.ServletConfig;
 import javax.servlet.ServletException;
@@ -13,6 +14,7 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import it.polimi.tiw.bancaservlet.beans.Conto;
 import it.polimi.tiw.bancaservlet.beans.Transazione;
 import it.polimi.tiw.bancaservlet.dao.TransazioneDAO;
 
@@ -47,7 +49,7 @@ public class doTransaction extends HttpServlet {
 			e.printStackTrace();
 		}
 		
-		TransazioneDAO tDAO= new TransazioneDAO(connection);
+		tDAO = new TransazioneDAO(connection);
 	}
 
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
@@ -56,16 +58,25 @@ public class doTransaction extends HttpServlet {
 	}
 
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+				
+		Integer id_conto = Integer.parseInt(request.getParameter("idconto"));
 		
-		/*tDAO.insert(new Transazione(
+		Conto c = tDAO.FillContoById(id_conto);
+		
+		System.out.println(c);
+		
+		if (true) {
+			tDAO.insert(new Transazione(
 				0,
 				Float.parseFloat(request.getParameter("importo")),
 				Date.valueOf(request.getParameter("data")),
-				,
+				id_conto,
 				Integer.parseInt(request.getParameter("id_dest")),
 				request.getParameter("causale")
-		));*/
-		
-		System.out.println(request.getAttributeNames());
+			), c);
+		} else {
+			response.sendError(406, "Errore nell inserimento della transazione al DB, operazioni nulle!");
+		}
+
 	}
 }

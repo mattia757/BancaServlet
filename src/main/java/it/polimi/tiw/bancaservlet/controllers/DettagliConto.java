@@ -8,18 +8,14 @@ import java.util.List;
 
 import javax.servlet.ServletConfig;
 import javax.servlet.ServletException;
-import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import javax.sound.midi.SysexMessage;
 
-import it.polimi.tiw.bancaservlet.beans.Conto;
 import it.polimi.tiw.bancaservlet.beans.Transazione;
 import it.polimi.tiw.bancaservlet.beans.User;
 import it.polimi.tiw.bancaservlet.dao.ContoDAO;
 import it.polimi.tiw.bancaservlet.dao.TransazioneDAO;
-import it.polimi.tiw.bancaservlet.dao.UserDAO;
 
 
 public class DettagliConto extends HttpServlet {
@@ -65,6 +61,7 @@ public class DettagliConto extends HttpServlet {
     	if (contoDAO.isVerified(user.getId(), conto_id)) {
     		List<Transazione> transazioni = transazioneDAO.getTransazioniById(conto_id);
         	request.setAttribute("transazioni", transazioni);
+        	request.setAttribute("idConto", conto_id);
         	request.getRequestDispatcher("/WEB-INF/StatoConto.jsp").forward(request, response);
 		}
     	else {

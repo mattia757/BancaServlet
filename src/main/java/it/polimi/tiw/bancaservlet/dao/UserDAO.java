@@ -59,29 +59,7 @@ public class UserDAO {
 			return Optional.empty();
 		}
 	}
-		
-	public Optional<User> getByEmail(String email) {
-		String SQL_GET_BY_EMAIL ="select Id, Username, Email, Password, Nome, Cognome From utente where Email = ?";
-		try (PreparedStatement ps = connection.prepareStatement(SQL_GET_BY_EMAIL)) {
-			ps.setString(1, email);
-			try (ResultSet resultSet = ps.executeQuery()) {
-				if (resultSet.next()) {
-					Integer id = resultSet.getInt(1);
-					String username = resultSet.getString(2);
-					String password = resultSet.getString(3);
-					String nome = resultSet.getString(4);
-					String cognome = resultSet.getString(5);
-					return Optional.of(new User(id, username, email, password, nome, cognome));
-				} else {
-					return Optional.empty();
-				}
-			}
-		} catch (SQLException e) {
-			e.printStackTrace();
-			return Optional.empty();
-		}
-	}
-	
+			
 	public int insert(User user) {
 		String SQL_INSERT = "Insert Into utente (Username, Email, Password, Nome, Cognome) values (?, ?, ?, ?, ?)";
 		int result = 0;

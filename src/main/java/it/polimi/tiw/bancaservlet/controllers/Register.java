@@ -7,14 +7,10 @@ import java.sql.DriverManager;
 import java.sql.SQLException;
 
 import javax.servlet.ServletConfig;
-import javax.servlet.ServletContext;
 import javax.servlet.ServletException;
-import javax.servlet.UnavailableException;
-import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-
 
 import it.polimi.tiw.bancaservlet.beans.User;
 import it.polimi.tiw.bancaservlet.dao.UserDAO;
@@ -75,36 +71,27 @@ public class Register extends HttpServlet {
     			|| email == null || email.isEmpty()
     			|| nome == null || nome .isEmpty()
     			|| cognome == null || cognome.isEmpty()) {
-			response.sendError(HttpServletResponse.SC_BAD_REQUEST, "Parametri incompleti");
+			response.sendError(400, "Parametri incompleti");
 			return;
 		}
     	
     	// Controllo password e re_password
 		if (!password.equals(re_password)) {
-			//TODO Controllo messaggi errore password
-			//response.sendError(HttpServletResponse.SC_UNAUTHORIZED, "Inserisci la stessa password");
-			//request.getSession().setAttribute("ServletMessage", "Inserisci la stessa password");
+			response.sendError(400, "Inserisci la stessa password");
 			response.sendRedirect("register");
 			return;
 		}
 		
 		// Password > 8
 		if (password.length() < 8) {
-			request.getSession().setAttribute("ServletMessage", "Password must be at least 8 characters long");
-			response.sendRedirect("register");
-			return;
-		}
-		
-		// Check if user already exists
-		if (userDAO.getByEmail(email).isPresent()) {
-			request.getSession().setAttribute("ServletMessage", "Email is already registered");
+			response.sendError(400, "La password deve essere lunga almeno 8 caratteri");
 			response.sendRedirect("register");
 			return;
 		}
 		
 		// Check if user already exists
 		if (userDAO.getByUsername(username).isPresent()) {
-			request.getSession().setAttribute("ServletMessage", "Username is already registered");
+			response.sendError(400, "Lo username inserito è già registrato");
 			response.sendRedirect("register");
 			return;
 		}
@@ -119,12 +106,14 @@ public class Register extends HttpServlet {
 		
 		// Try to insert
 		if (userDAO.insert(user) == 0) {
-			request.getSession().setAttribute("ServletMessage", "Failed to create the user. Try later");
+			response.sendError(400, "Impossibile creare l'utente. Prova più tardi");
 			response.sendRedirect("register");
 			return;
 		}
-		// Success: go to login page
-		request.getSession().setAttribute("ServletMessage", "User registered");
+		// Success: go to login page TODO Cercare come dare un messaggio di successo
+		
+		//request.getSession().setAttribute("ServletMessage", "User registered");
+		//response.sendError(400, "Inserisci lo username");
 		response.sendRedirect("login");
 	}
 	

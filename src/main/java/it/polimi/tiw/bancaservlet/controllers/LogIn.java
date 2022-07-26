@@ -1,7 +1,6 @@
 package it.polimi.tiw.bancaservlet.controllers;
 
 import java.io.IOException;
-import java.net.PasswordAuthentication;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.SQLException;
@@ -10,11 +9,9 @@ import java.util.Optional;
 import javax.servlet.ServletContext;
 import javax.servlet.ServletException;
 import javax.servlet.UnavailableException;
-import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import javax.servlet.http.HttpSession;
 
 import it.polimi.tiw.bancaservlet.beans.User;
 import it.polimi.tiw.bancaservlet.dao.UserDAO;
@@ -55,18 +52,19 @@ public class LogIn extends HttpServlet {
     
     public void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
     	UserDAO userDAO = new UserDAO(connection);
+    	
     	// Richiesta parametri per Login
     	String username = request.getParameter("username");
     	String password = request.getParameter("password");
     	
     	// Controlli parametri
     	if (username == null || username.isEmpty()) {
-    		request.getSession().setAttribute("ServletMessage", "Inserisci lo username");
+    		response.sendError(400, "Inserisci lo username");
 			response.sendRedirect("login");
 			return;
 		}
 		if (password == null || password.isEmpty()) {
-			request.getSession().setAttribute("ServletMessage", "Insert la password");
+			response.sendError(400, "Inserisci la password");
 			response.sendRedirect("login");
 			return;
 		}
@@ -74,7 +72,7 @@ public class LogIn extends HttpServlet {
 		// Check if the user exists
 		Optional<User> maybeUser = userDAO.getByUsername(username);
 		if (maybeUser.isEmpty()) {
-			request.getSession().setAttribute("ServletMessage", "Utente non esiste");
+			response.sendError(400, "L'utente inserito non esiste");
 			response.sendRedirect("login");
 			return;
 		}
@@ -82,7 +80,7 @@ public class LogIn extends HttpServlet {
 		// Check if the password matches
 		User user = maybeUser.get();
 		if (!user.getPassword().equals(password)) {
-			request.getSession().setAttribute("ServletMessage", "Password errata");
+			response.sendError(400, "Inserisci la stessa password");
 			response.sendRedirect("login");
 			return;
 		}

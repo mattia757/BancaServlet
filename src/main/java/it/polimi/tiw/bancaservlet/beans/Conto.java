@@ -47,20 +47,6 @@ public class Conto {
 	@Override
 	public int hashCode() {
 		return Objects.hash(id, id_utente, saldo);
-	}
-
-	@Override
-	public boolean equals(Object obj) {
-		if (this == obj)
-			return true;
-		if (obj == null)
-			return false;
-		if (getClass() != obj.getClass())
-			return false;
-		Conto other = (Conto) obj;
-		return id == other.id && id_utente == other.id_utente
-				&& Float.floatToIntBits(saldo) == Float.floatToIntBits(other.saldo);
-	}
-	
+	}	
 	
 }

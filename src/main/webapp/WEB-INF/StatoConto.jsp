@@ -8,8 +8,19 @@
 <meta charset="ISO-8859-1">
 <title>Stato Conto</title>
 </head>
-<body>
-	<table border = "1">
+<body style = "text-align: center;">
+	<%
+		Integer id_conto = Integer.parseInt(request.getParameter("idConto"));
+		if(id_conto != null)
+		{
+			System.out.println(id_conto);
+		}
+		else{
+			System.out.println("ciao2");
+		}
+	%>
+	<h1>Dettagli conto <%=id_conto%></h1>
+	<table border = "1" style = "margin-left: 43%;">
 		<c:forEach var="transazione" items = "${transazioni}" varStatus = "row">
 			<tr>
 				<td id = "id" name = "id">${transazione.id}</td>
@@ -23,13 +34,16 @@
 	</table>
 	
 	<br><br>	
+	<h1>Pianifica un Trasferimento</h1>
 	
-	<form method = "POST" action = "doTransaction">
-		<input type = "number" step = "any" id = "importo" name = "importo" value = "importo"/>
-		<input type = "Date" id = "data" name = "data" value = "Data" />
-		<input type = "number" min = "1" id = "id_dest" name = "id_dest" value = "Id_dest"/>
-		<input type = "text" id = "causale" name = "causale" value = "Causale" />
+	<form method = "POST" action = "dotransaction">
+		Importo: <input type = "number" step = "any" id = "importo" name = "importo" value = "importo" required/> <br><br>
+		Data: <input type = "datetime-local" id = "data" name = "data" value = "Data" required/> <br><br> 
+		Importo: <input type="number" min="1" id="id_dest" name="id_dest" value="Id_dest" required /> <br><br>
+		Causale: <input type = "text" id = "causale" name = "causale" value = "Causale" required/> <br><br>
+		<input type = "hidden" value= "<%=id_conto%>" name = "idconto"> 
 		<input type = "submit" />
+
 	</form>
 </body>
 </html>
