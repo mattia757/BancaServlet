@@ -6,7 +6,6 @@ import java.sql.Date;
 import java.sql.DriverManager;
 import java.sql.SQLException;
 import java.time.LocalDate;
-import java.time.LocalDateTime;
 
 import javax.servlet.ServletConfig;
 import javax.servlet.ServletException;
@@ -57,22 +56,21 @@ public class doTransaction extends HttpServlet {
 		
 	}
 
-	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-				
+	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {	
 		Integer id_conto = Integer.parseInt(request.getParameter("idconto")); // Mittente
+		Integer id_conto_dest = Integer.parseInt(request.getParameter("id_dest")); //Destinatario
 		
-		Integer id_conto_dest = Integer.parseInt(request.getParameter("id_dest")); //Detinatario
-		
-		Conto c = tDAO.FillContoById(id_conto);
+		Conto c = tDAO.FillContoById(id_conto); //Conto Mittente
 	    
-		if (Float.parseFloat(request.getParameter("importo")) <= c.getSaldo()) {
+		if (Float.parseFloat(request.getParameter("importo")) <= c.getSaldo()) {// Controllo se importo è maggiore o uguale del saldo del conto
 			try {
+				// Try to insert
 				tDAO.insert(new Transazione(
 					0,
-					Float.parseFloat(request.getParameter("importo")),
-					Date.valueOf(LocalDate.now()),
-					id_conto,
-					id_conto_dest,
+					Float.parseFloat(request.getParameter("importo")), // importo preso dal form
+					Date.valueOf(LocalDate.now()), // Data attuale
+					id_conto, // id mittente
+					id_conto_dest, // id destinatario
 					request.getParameter("causale")
 				), c, id_conto_dest);
 				

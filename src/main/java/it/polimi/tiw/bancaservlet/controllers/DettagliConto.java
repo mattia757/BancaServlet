@@ -4,7 +4,6 @@ import java.io.IOException;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.SQLException;
-import java.util.Iterator;
 import java.util.List;
 
 import javax.servlet.ServletConfig;
@@ -22,7 +21,6 @@ import it.polimi.tiw.bancaservlet.dao.TransazioneDAO;
 
 public class DettagliConto extends HttpServlet {
 	private static final long serialVersionUID = 1L;
-	private Connection connection;
 	TransazioneDAO transazioneDAO;
 	ContoDAO contoDAO;
        
@@ -65,17 +63,17 @@ public class DettagliConto extends HttpServlet {
 			conti = contoDAO.getByID(conto_id);
 			boolean Trovato = false;
 			
-			for (Conto conto : conti) {
+			for (Conto conto : conti) { // Controllo per parametro conto GET 
 				if (conto.getId() == conto_id) {
 					Trovato = true;
 				}
 			}
 			
-			if (Trovato = true) {
-				if (contoDAO.isVerified(user.getId(), conto_id)) {
+			if (Trovato = true) { // Controllo superato, procedo
+				if (contoDAO.isVerified(user.getId(), conto_id)) { // Ulteriore controllo
 		    		List<Transazione> transazioni = transazioneDAO.getTransazioniById(conto_id);
-		        	request.setAttribute("transazioni", transazioni);
-		        	request.setAttribute("idConto", conto_id);
+		        	request.setAttribute("transazioni", transazioni);// Setto in Request transazioni
+		        	request.setAttribute("idConto", conto_id); // Setto in Request l'id del conto
 		        	request.getRequestDispatcher("/WEB-INF/StatoConto.jsp").forward(request, response);
 				}
 		    	else {

@@ -1,10 +1,5 @@
 package it.polimi.tiw.bancaservlet.beans;
 
-import java.lang.annotation.AnnotationTypeMismatchException;
-import java.util.Objects;
-
-import javax.swing.table.TableStringConverter;
-
 public class User {
 	private int id;
 	private String Username;

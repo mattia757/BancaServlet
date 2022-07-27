@@ -1,7 +1,5 @@
 package it.polimi.tiw.bancaservlet.beans;
 
-import java.util.Objects;
-
 public class Conto {
 	int id;
 	float saldo;
@@ -43,10 +41,5 @@ public class Conto {
 	public String toString() {
 		return "Conto [id=" + id + ", saldo=" + saldo + ", id_utente=" + id_utente + "]";
 	}
-
-	@Override
-	public int hashCode() {
-		return Objects.hash(id, id_utente, saldo);
-	}	
 	
 }

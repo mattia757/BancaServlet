@@ -18,7 +18,7 @@
 	<context-param>
 		<param-name>dbDriver</param-name>
 		<param-value>com.mysql.cj.jdbc.Driver</param-value>
-	</context-param>
+	</context-param> 
 	
 	<!-- Servlets -->
 	<servlet>

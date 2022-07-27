@@ -18,7 +18,7 @@ private Connection connection;
 		this.connection = connection;
 	}
 	
-	public List<Conto> getByID(Integer id) throws SQLException {
+	public List<Conto> getByID(Integer id) throws SQLException { // Dato l'id dell'utente estrae tutti i conti
 		List<Conto> conti = new ArrayList<Conto>();
 		String query = "SELECT c.Id, c.Id_Utente, c.Saldo FROM conto c, utente u WHERE u.Id = ? && u.Id = c.Id_Utente";
 		
@@ -124,7 +124,7 @@ private Connection connection;
 		}
 	}
 	
-	public Boolean isVerified(int id_utente, int id_conto) {
+	public Boolean isVerified(int id_utente, int id_conto) { // Datu un utente e un conto verifica se l'utente ha il permesso
 		String query = "select null From conto c Where c.Id = ? && c.Id_Utente = ?";
 		boolean isVerified = false;
 		try (PreparedStatement ps = connection.prepareStatement(query)) {

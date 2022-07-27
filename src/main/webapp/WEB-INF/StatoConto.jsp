@@ -11,13 +11,6 @@
 <body style = "text-align: center;">
 	<%
 		Integer id_conto = Integer.parseInt(request.getParameter("idConto"));
-		if(id_conto != null)
-		{
-			System.out.println(id_conto);
-		}
-		else{
-			System.out.println("ciao2");
-		}
 	%>
 	<h1>Dettagli conto <%=id_conto%></h1>
 	<table border = "1" style = "margin-left: 43%;">
@@ -43,6 +36,7 @@
 		Causale: <input type = "text" id = "causale" name = "causale" value = "Causale" required/> <br><br>
 		<input type = "hidden" value= "<%=id_conto%>" name = "idconto"> 
 		<input type = "submit" />
+		<a href = "home">Indietro</a>
 
 	</form>
 </body>

@@ -14,12 +14,10 @@ import javax.servlet.http.HttpServletResponse;
 import it.polimi.tiw.bancaservlet.beans.Conto;
 import it.polimi.tiw.bancaservlet.beans.User;
 import it.polimi.tiw.bancaservlet.dao.ContoDAO;
-import it.polimi.tiw.bancaservlet.dao.UserDAO;
 
 
 public class AggiungiConto extends HttpServlet {
 	private static final long serialVersionUID = 1L;
-	private Connection connection = null;
 	private ContoDAO contoDAO;
 	
     public AggiungiConto() {
@@ -60,21 +58,25 @@ public class AggiungiConto extends HttpServlet {
 		// TODO Auto-generated method stub
 		User user = (User) request.getSession().getAttribute("user");
 		Float saldo = Float.parseFloat(request.getParameter("saldo"));
-
-		try
-		{
-			contoDAO.insert(new Conto(
-				0,
-				saldo,
-				user.getId()
-			));
-			response.sendRedirect("home");
-		}
-		catch (Exception e)
-		{
-			response.sendError(406, "Errore nell'inserimento del conto, controlla i campi!");
-		}	
 		
+		if (saldo != null && saldo > 0) { // Controllo lato Server Saldo
+			try
+			{
+				contoDAO.insert(new Conto( // Controllo superato, procedo all'inserimento
+					0,
+					saldo,
+					user.getId()
+				));
+				response.sendRedirect("home");
+			}
+			catch (Exception e)
+			{
+				response.sendError(406, "Errore nell'inserimento del conto, controlla i campi!");
+			}
+		}
+		else {
+			response.sendError(406, "Il saldo deve essere maggiore o uguale di 0!");
+			return;
+		}
 	}
-
 }

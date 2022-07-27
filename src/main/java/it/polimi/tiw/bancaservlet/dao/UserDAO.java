@@ -15,11 +15,12 @@ public class UserDAO {
 		this.connection = connection;
 	}
 	
-	public Optional<User> getByUsername(String username) {
+	public Optional<User> getByUsername(String username) { // Dato lo username restituisce l'intero oggetto User, gestione nullPointer
 		String SQL_GET_BY_USERNAME = "select Id, Email, Password, Nome, Cognome From utente where Username = ?";
 		try (PreparedStatement ps = connection.prepareStatement(SQL_GET_BY_USERNAME)) {
+			// Setting Parametri
 			ps.setString(1, username);
-			try (ResultSet resultSet = ps.executeQuery()) {
+			try (ResultSet resultSet = ps.executeQuery()) {// Risultato Query
 				if (resultSet.next()) {
 					Integer id = resultSet.getInt(1);
 					String email = resultSet.getString(2);
@@ -27,7 +28,7 @@ public class UserDAO {
 					String nome = resultSet.getString(4);
 					String cognome = resultSet.getString(5);
 					
-					return Optional.of(new User(id, username, email, password, nome, cognome));
+					return Optional.of(new User(id, username, email, password, nome, cognome));// return
 				} else {
 					return Optional.empty();
 				}

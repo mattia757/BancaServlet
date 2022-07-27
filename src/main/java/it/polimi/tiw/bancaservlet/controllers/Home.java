@@ -52,7 +52,6 @@ public class Home extends HttpServlet {
 	@Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		// TODO Auto-generated method stub
-		
 		ContoDAO cDAO = new ContoDAO(connection);
 		List<Conto> conti;
 		
@@ -60,11 +59,9 @@ public class Home extends HttpServlet {
 		
 		if (u == null) {
 			response.sendError(400, "Utente non in sessione");
-			response.sendRedirect("index.html");
 			return;
 		}
 		else {
-			
 			String query = "SELECT * FROM utente WHERE Username = ?";
 			
 			ResultSet result = null;
@@ -72,8 +69,11 @@ public class Home extends HttpServlet {
 			
 			try {
 				pstatement = connection.prepareStatement(query);
+				
 				pstatement.setInt(1, u.getId());
+				
 				result = pstatement.executeQuery();
+				
 				while (result.next()) {
 					u.setId(result.getInt("id"));
 				}
@@ -82,7 +82,7 @@ public class Home extends HttpServlet {
 			try {
 				conti = cDAO.getByID(u.getId());
 				String path = "/WEB-INF/Home.jsp";
-				request.setAttribute("conti", conti);
+				request.setAttribute("conti", conti); //Mi salvo in Request Conti
 				RequestDispatcher dispatcher = request.getRequestDispatcher(path);
 				dispatcher.forward(request, response);
 			} catch (SQLException e) {
